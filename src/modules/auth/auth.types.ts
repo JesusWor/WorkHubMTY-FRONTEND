@@ -1,5 +1,7 @@
 export interface User {
-  eid: string;
+  e_id: string;
+  name: string;
+  role: string;
 }
 
 export interface AuthResponse {
@@ -8,7 +10,7 @@ export interface AuthResponse {
 }
 
 export interface LoginInput {
-  eid: string;
+  e_id: string;
   password: string;
 }
 
