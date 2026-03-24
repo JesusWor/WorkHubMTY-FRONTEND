@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import UserIcon from "../../assets/user.svg";
 import LockIcon from "../../assets/lock.svg";
 import AccentureLogo from "../../assets/Accenture.png";
@@ -6,6 +6,15 @@ import AccentureLogo from "../../assets/Accenture.png";
 import "./Login.css";
 import { useAuth } from "../../modules/auth/useAuth";
 
+/*
+faltante ---------
+overflow 
+margins
+input : {
+  focus
+  align
+}
+*/
 interface User {
   e_id: string;
   password: string;
@@ -46,6 +55,7 @@ function Login() {
             <input
               className="login-form-group-input"
               type="text"
+              name="enterprise id"
               onChange={onChangeUser}
               placeholder="Enterprise ID"
               tabIndex={0}
@@ -56,6 +66,7 @@ function Login() {
 
             <input
               className="login-form-group-input"
+              name="password"
               type="password"
               onChange={onChangeUser}
               placeholder="Contraseña"
