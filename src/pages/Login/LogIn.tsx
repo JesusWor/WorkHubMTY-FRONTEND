@@ -1,13 +1,18 @@
-import "./LogIn.css";
+import "./Login.css";
 
-function LogIn() {
+function Login() {
   return (
-    <>
-      <section>
-        <h2>Inicio de sesión</h2>
-      </section>
-    </>
+    <section className="login">
+      <>
+        <h3>Workhub MTY</h3>
+        <img />
+        <h2>Bienvenido</h2>
+      </>
+      <div>
+        <h3>Iniciar sesión</h3>
+      </div>
+    </section>
   );
 }
 
-export default LogIn;
+export default Login;
