@@ -55,7 +55,7 @@ function Login() {
     <section className="flex h-[100svh] w-full overflow-hidden bg-black">
       <div className="ml-[3svw] mr-auto grid w-full grid-rows-1 text-left text-white">
         <div>
-          <h3 className="select-none text-[3svw]">Workhub MTY</h3>
+          <h3 className="text-4xl font-semibold tracking-tight">Workhub MTY</h3>
           <hr className="border-white/40" />
         </div>
 
@@ -68,11 +68,11 @@ function Login() {
           priority
         />
 
-        <h2 className="select-none text-[4svw]">Bienvenido</h2>
+        <h2 className="text-4xl font-semibold tracking-tight">Bienvenido</h2>
       </div>
 
       <div className="mx-[2svw] my-[3svh] flex w-[40%] flex-col justify-center rounded-[4rem] bg-white p-8 text-left">
-        <h3 className="text-[2rem]">Iniciar sesión</h3>
+        <h3 className="text-2xl font-semibold">Iniciar sesión</h3>
 
         <form className="mt-6 flex flex-col gap-4" onSubmit={onSubmitLogin}>
           <label className="flex items-center gap-2 rounded-[1.5rem] bg-[#d1d1d1] p-3 transition-colors duration-500 hover:bg-[#c7c7c7]">
