@@ -18,7 +18,7 @@ export default function Navbar() {
     console.log(pathname);
   }, [pathname]);
   return (
-    <aside className="h-screen w-48 fixed top-0 left-0 z-40 bg-surface-lowest flex flex-col p-4 gap-8">
+    <header className="h-screen w-48 fixed top-0 left-0 z-40 bg-surface-lowest flex flex-col p-4 gap-8">
       {/* <div className="container mx-auto flex flex-col items-center justify-between"> */}
       <span className="text-2xl font-bold text-on-surface-container pl-2">
         <Image
@@ -59,6 +59,6 @@ export default function Navbar() {
           Support
         </label>
       </div>
-    </aside>
+    </header>
   );
 }

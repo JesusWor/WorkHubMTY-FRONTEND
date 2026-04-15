@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Manrope } from "next/font/google";
 import "../globals.css";
-import Navbar from "../components/Navbar";
-import Header from "../components/Header";
+// import Navbar from "../components/Navbar";
+// import Header from "../components/Header";
 
 const manrope = Manrope({
   subsets: ["latin"],
@@ -32,11 +32,7 @@ export default function PrivateLayout({
 }>) {
   return (
     <>
-      <Navbar />
-      <div className="flex flex-1 ml-48 flex-col">
-        <Header />
-        <main className="flex-1 overflow-y-auto">{children}</main>
-      </div>
+      <main className="flex-1 overflow-y-auto">{children}</main>
     </>
   );
 }
