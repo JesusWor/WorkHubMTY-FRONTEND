@@ -1,5 +1,5 @@
 import Image from "next/image";
-import NotificationBell from "../../../../public/notification_bell.png";
+import AddFriend from "../../../../public/add_friend.png";
 
 export default function Home() {
   return (
@@ -13,7 +13,17 @@ export default function Home() {
 
     <div className="flex gap-10 mx-[2svw] my-[3svh] h-full">
       <div className="flex w-[30%] h-[90%] flex-col rounded-[2rem] bg-white p-8">
+        <div className="flex justify-start items-start px-2 mt-4">
         <h3 className="text-xl font-bold">Red personal</h3>
+        <Image
+          src={AddFriend}
+          alt="Add Friend"
+          width={50}
+          height={100}
+          className="w-[3svw] select-none"
+          priority
+        />
+        </div>
       </div>
 
       <div className="flex w-[60%] h-[90%] flex-col gap-10">
@@ -22,9 +32,17 @@ export default function Home() {
           <h3 className="text-xl font-bold">Agenda Rápida</h3>
         </div>
 
-        <div className="flex flex-1 rounded-[2rem] bg-white p-8 justify-center items-top">
+        <div className="flex flex-1 flex-col rounded-[2rem] bg-white p-8 justify-between">
+  
           <h3 className="text-xl font-bold">Juntas y Eventos</h3>
+
+        <div className="flex justify-center items-center px-2 mt-4">
+          <p className="text-sm text-gray-500">
+          Próximas reuniones y eventos importantes
+          </p>
         </div>
+
+      </div>
 
       </div>
 
