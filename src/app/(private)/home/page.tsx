@@ -30,17 +30,19 @@ export default function Home() {
 
         <div className="flex flex-1 rounded-[2rem] bg-white p-8 justify-center items-top">
           <h3 className="text-xl font-bold">Agenda Rápida</h3>
+          <div className="flex flex-col gap-4 mt-4">
+          <h3 className="text-sm text-gray-500 mt-2">LUNES</h3>
+          <h3 className="text-sm text-gray-500 mt-2">MARTES</h3>
+          <h3 className="text-sm text-gray-500 mt-2">MIÉRCOLES</h3>
+          <h3 className="text-sm text-gray-500 mt-2">JUEVES</h3>
+          <h3 className="text-sm text-gray-500 mt-2">VIERNES</h3>
+          <h3 className="text-sm text-gray-500 mt-2">SÁBADO</h3>
+          </div>
         </div>
 
-        <div className="flex flex-1 flex-col rounded-[2rem] bg-white p-8 justify-between">
+        <div className="flex flex-1 rounded-[2rem] bg-white p-8 justify-center items-top">
   
           <h3 className="text-xl font-bold">Juntas y Eventos</h3>
-
-        <div className="flex justify-center items-center px-2 mt-4">
-          <p className="text-sm text-gray-500">
-          Próximas reuniones y eventos importantes
-          </p>
-        </div>
 
       </div>
 
