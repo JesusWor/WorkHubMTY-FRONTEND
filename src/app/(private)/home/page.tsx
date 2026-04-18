@@ -1,5 +1,6 @@
 import Image from "next/image";
 import AddFriend from "../../../../public/add_friend.png";
+import RightArrow from "../../../../public/right_arrow.png";
 
 export default function Home() {
   return (
@@ -23,7 +24,7 @@ export default function Home() {
                 priority
               />
             </div>
-            
+
             <div className="flex-1 flex flex-col gap-4">
               {[1, 2, 3].map((i) => (
                 <div key={i} className="flex items-center gap-3">
@@ -98,9 +99,14 @@ export default function Home() {
            
             <div className="flex flex-1 rounded-[2rem] bg-white p-6">
               <h3 className="text-xl font-bold">Juntas y Eventos</h3>
+              <Image
+                src={RightArrow}
+                alt="Right Arrow"
+                className="w-6 cursor-pointer select-none"
+                priority
+              />
             </div>
-
-          </div>
+            </div>
 
         </div>
       </div>
