@@ -13,7 +13,7 @@ export default function Home() {
         </h3>
 
         <div className="flex gap-10 mx-[2svw] my-[3svh] h-[85%]">
-          <div className="flex w-[30%] flex-col rounded-[2rem] bg-white p-6">
+          <div className="flex w-[30%] flex-col rounded-[0.5rem] bg-white p-6">
 
             <div className="flex items-center justify-between mb-6">
               <h3 className="text-xl font-bold">Red personal</h3>
@@ -52,7 +52,7 @@ export default function Home() {
 
           <div className="flex w-[60%] flex-col gap-6">
 
-            <div className="flex flex-1 flex-col rounded-[2rem] bg-white p-6">
+            <div className="flex flex-1 flex-col rounded-[0.5rem] bg-white p-6">
               <h3 className="text-xl font-bold mb-4">Agenda rápida</h3>
 
               <div className="relative w-full h-full pl-16 pb-6">
@@ -97,7 +97,7 @@ export default function Home() {
             </div>
 
            
-            <div className="flex flex-1 rounded-[2rem] bg-white p-6">
+            <div className="flex flex-1 rounded-[0.5rem] bg-white p-6">
               <h3 className="text-xl font-bold">Juntas y Eventos</h3>
               <Image
                 src={RightArrow}
