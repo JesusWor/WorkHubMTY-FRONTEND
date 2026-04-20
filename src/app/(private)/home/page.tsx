@@ -6,7 +6,7 @@ export default function Home() {
   return (
     <section className="flex h-[100svh] w-full overflow-hidden bg-gray-200">
 
-      <div className="flex-1 px-[4rem] py-8 pt-12">
+      <div className="flex-1 px-[4rem] py-8 pt-25">
 
         <h3 className="text-4xl font-semibold leading-tight">
           Bienvenido, Croissant
