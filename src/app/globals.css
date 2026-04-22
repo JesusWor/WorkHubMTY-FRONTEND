@@ -8,15 +8,15 @@
 @theme {
   --color-primary-1: #a100ff;
 
-  --color-background: #E3E3E3;
-  --color-background-page: #EDEDED;
+  --color-background: #ededed;
+  --color-background-page: #e3e3e3;
+
   --color-on-background: #000000;
   --color-on-background-2: #505050;
 
   --color-surface-lowest: #000000;
   --color-neutral-1: #f0f0f0;
   --color-on-surface-container: #ffffff;
-
 }
 /* 
 @media (prefers-color-scheme: dark) {
@@ -33,7 +33,7 @@ body {
 }
 
 @theme {
-  --font-sans: 'Inter', sans-serif;
+  --font-sans: "Inter", sans-serif;
   --font-weight: 600; /* o 700 */
   --letter-spacing: -0.02em;
 }
