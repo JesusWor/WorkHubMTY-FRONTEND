@@ -8,6 +8,7 @@ import './navbar.css';
 
 const routes = [
   { name: "Inicio", href: "/home" },
+  { name: "Cubículo", href: "/cubiculo"},
   { name: "Tablero",href: "/tablero" },
   { name: "Reservaciones", href: "/reservaciones" },
   { name: "Calendario", href: "/calendario" },
@@ -22,12 +23,14 @@ export default function Navbar() {
     <header className="w-full fixed z-40 bg-background-page flex items-center flex-row p-4 gap-4">
       {/* <div className="container mx-auto flex flex-col items-center justify-between"> */}
       <span className="text-2xl font-bold text-on-surface-container pl-2">
-        <Image
-          src={AccentureLogo}
-          alt="accenture logo"
-          width={40}
-          height={40}
-        />
+        <Link href="/home">
+          <Image
+            src={AccentureLogo}
+            alt="accenture logo"
+            width={40}
+            height={40}
+          />
+        </Link>
       </span>
       {/* </div> */}
       <nav className="flex flex-row text-white gap-4 ml-2">
