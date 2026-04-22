@@ -8,8 +8,9 @@ import "./navbar.css";
 
 const routes = [
   { name: "Inicio", href: "/home" },
-  { name: "Tablero", href: "/tablero" },
-  { name: "Cubículos", href: "/reservaciones" },
+  { name: "Cubículo", href: "/cubiculo"},
+  { name: "Tablero",href: "/tablero" },
+  { name: "Reservaciones", href: "/reservaciones" },
   { name: "Calendario", href: "/calendario" },
 ];
 
