@@ -35,10 +35,10 @@ const SESIONES: Sesion[] = [
 ];
 
 const EQUIPOS_MOCK: Equipo[] = [
-  { id: "e1", nombre: "Equipo Alpha", miembros: 5, color: "#ede9fe" },
-  { id: "e2", nombre: "Equipo Beta", miembros: 8, color: "#fce7f3" },
-  { id: "e3", nombre: "Design Team", miembros: 4, color: "#e0f2fe" },
-  { id: "e4", nombre: "Dev Team", miembros: 6, color: "#dcfce7" },
+  { id: "e1", nombre: "Equipo Alpha", miembros: 5, color: "bg-violet-100" },
+  { id: "e2", nombre: "Equipo Beta", miembros: 8, color: "bg-pink-100" },
+  { id: "e3", nombre: "Design Team", miembros: 4, color: "bg-sky-100" },
+  { id: "e4", nombre: "Dev Team", miembros: 6, color: "bg-green-100" },
 ];
 
 const RECIENTES_MOCK: Persona[] = [
@@ -49,392 +49,273 @@ const RECIENTES_MOCK: Persona[] = [
 
 const Avatar = ({
   nombre,
-  bg = "#e5e7eb",
-  color = "#6b7280",
-  size = 40,
+  variant = "colaborador",
+  size = "md",
 }: {
   nombre: string;
-  bg?: string;
-  color?: string;
-  size?: number;
+  variant?: "colaborador" | "invitado";
+  size?: "sm" | "md";
 }) => {
-  const initials = nombre.split(" ").map((n) => n[0]).join("").slice(0, 2).toUpperCase();
+  const initials = nombre
+    .split(" ")
+    .map((n) => n[0])
+    .join("")
+    .slice(0, 2)
+    .toUpperCase();
+
+  const sizeClasses = size === "sm" ? "w-9 h-9 text-xs" : "w-10 h-10 text-sm";
+  const colorClasses =
+    variant === "colaborador"
+      ? "bg-violet-100 text-violet-700"
+      : "bg-sky-100 text-sky-700";
+
   return (
-    <div style={{
-      width: size, height: size, borderRadius: "50%",
-      background: bg, color,
-      display: "flex", alignItems: "center", justifyContent: "center",
-      fontWeight: 600, fontSize: size * 0.32, flexShrink: 0,
-    }}>
+    <div
+      className={`${sizeClasses} ${colorClasses} rounded-full flex items-center justify-center font-semibold shrink-0`}
+    >
       {initials}
     </div>
   );
 };
 
 export default function Cubiculo() {
-  const [invitados, setInvitados] = useState<Invitado[]>([
-    { id: "1", nombre: "Cristian Ricardo", email: "cristian@accenture.com", tipo: "colaborador" },
-    { id: "2", nombre: "Invitado", email: "juan@empresainteresada.com", tipo: "invitado" },
-  ]);
-  const [busqueda, setBusqueda] = useState("");
-  const [dropdownAbierto, setDropdownAbierto] = useState(false);
-  const [crearEquipo, setCrearEquipo] = useState(true);
-  const searchRef = useRef<HTMLDivElement>(null);
+    const [invitados, setInvitados] = useState<Invitado[]>([
+        { id: "1", nombre: "Cristian Ricardo", email: "cristian@accenture.com", tipo: "colaborador" },
+        { id: "2", nombre: "Invitado", email: "juan@empresainteresada.com", tipo: "invitado" },
+    ]);
+    const [busqueda, setBusqueda] = useState("");
+    const [dropdownAbierto, setDropdownAbierto] = useState(false);
+    const [crearEquipo, setCrearEquipo] = useState(true);
+    const searchRef = useRef<HTMLDivElement>(null);
 
-  const personasFiltradas = busqueda.length > 1
-    ? RECIENTES_MOCK.filter(
-        (p) =>
-          p.nombre.toLowerCase().includes(busqueda.toLowerCase()) ||
-          p.email.toLowerCase().includes(busqueda.toLowerCase())
-      )
-    : RECIENTES_MOCK;
+    const personasFiltradas =
+        busqueda.length > 1
+        ? RECIENTES_MOCK.filter((p) =>
+            p.nombre.toLowerCase().includes(busqueda.toLowerCase()) ||
+            p.email.toLowerCase().includes(busqueda.toLowerCase())
+        )
+        : RECIENTES_MOCK;
 
-  const equiposFiltrados = busqueda.length > 1
-    ? EQUIPOS_MOCK.filter((e) => e.nombre.toLowerCase().includes(busqueda.toLowerCase()))
-    : EQUIPOS_MOCK;
+    const equiposFiltrados =
+        busqueda.length > 1
+        ? EQUIPOS_MOCK.filter((e) =>
+            e.nombre.toLowerCase().includes(busqueda.toLowerCase())
+        )
+        : EQUIPOS_MOCK;
 
-  useEffect(() => {
-    const handleClickOutside = (e: MouseEvent) => {
-      if (searchRef.current && !searchRef.current.contains(e.target as Node)) {
+    useEffect(() => {
+        const handleClickOutside = (e: MouseEvent) => {
+            if (searchRef.current && !searchRef.current.contains(e.target as Node)) {
+                setDropdownAbierto(false);
+            }
+        };
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => document.removeEventListener("mousedown", handleClickOutside);
+    }, []);
+
+    const eliminarInvitado = (id: string) =>
+        setInvitados((prev) => prev.filter((i) => i.id !== id));
+
+    const agregarPersona = (persona: Persona) => {
+        if (invitados.find((i) => i.email === persona.email)) return;
+        setInvitados((prev) => [
+            ...prev,
+            { id: persona.id, nombre: persona.nombre, email: persona.email, tipo: "colaborador" },
+        ]);
+        setBusqueda("");
         setDropdownAbierto(false);
-      }
     };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
 
-  const eliminarInvitado = (id: string) =>
-    setInvitados((prev) => prev.filter((i) => i.id !== id));
+    const agregarEquipo = (equipo: Equipo) => {
+        if (invitados.find((i) => i.id === `equipo-${equipo.id}`)) return;
+        setInvitados((prev) => [
+            ...prev,
+            {
+                id: `equipo-${equipo.id}`,
+                nombre: equipo.nombre,
+                email: `${equipo.miembros} miembros`,
+                tipo: "colaborador",
+            },
+        ]);
+        setBusqueda("");
+        setDropdownAbierto(false);
+    };
 
-  const agregarPersona = (persona: Persona) => {
-    if (invitados.find((i) => i.email === persona.email)) return;
-    setInvitados((prev) => [
-      ...prev,
-      { id: persona.id, nombre: persona.nombre, email: persona.email, tipo: "colaborador" },
-    ]);
-    setBusqueda("");
-    setDropdownAbierto(false);
-  };
+    const handleFinalizar = () => alert("¡Reserva finalizada con éxito!");
 
-  const agregarEquipo = (equipo: Equipo) => {
-    if (invitados.find((i) => i.id === `equipo-${equipo.id}`)) return;
-    setInvitados((prev) => [
-      ...prev,
-      { id: `equipo-${equipo.id}`, nombre: equipo.nombre, email: `${equipo.miembros} miembros`, tipo: "colaborador" },
-    ]);
-    setBusqueda("");
-    setDropdownAbierto(false);
-  };
-
-  const handleFinalizar = () => alert("¡Reserva finalizada con éxito!");
-
-  return (
-    <section className="flex h-full w-full overflow-hidden bg-gray-200 overflow-hidden">
-            <div className="flex-1 px-[5rem] py-8 pt-23">
-                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "0.8rem" }}>
-                    <h3 style={{ fontSize: 28, fontWeight: 700, color: "#111827", margin: 0, letterSpacing: "-0.5px" }}>
+    return (
+        <section className="flex h-full w-full overflow-hidden bg-gray-200">
+            <div className="flex-1 px-20 py-8 pt-23 flex flex-col">
+                <div className="flex items-center justify-between mb-3">
+                    <h3 className="text-3xl font-bold text-gray-900 tracking-tight m-0">
                         Reserva completa
                     </h3>
-                    <button
-                        style={{
-                            display: "flex",
-                            alignItems: "center",
-                            gap: 10,
-                            background: "white",
-                            border: "1px solid #e5e7eb",
-                            borderRadius: 12,
-                            padding: "10px 20px",
-                            cursor: "pointer",
-                            fontWeight: 600,
-                            fontSize: 15,
-                            color: "#111827",
-                            boxShadow: "0 1px 3px rgba(0,0,0,0.07)",
-                        }}
-                    >
-                        <Users size={22} color="#6b7280" />
+                    <button className="flex items-center gap-2.5 bg-white border border-gray-200 rounded-xl px-5 py-2.5 cursor-pointer font-semibold text-base text-gray-900 shadow-sm hover:bg-gray-50 transition-colors">
+                        <Users size={22} className="text-gray-500" />
                         Equipos
                     </button>
                 </div>
 
                 <div className="flex gap-6 flex-1 min-h-0">
-                    <div style={{
-                        background: "white", borderRadius: 5,
-                        border: "1px solid #e5e7eb", padding: "1.5rem",
-                        width: 300, flexShrink: 0,
-                        display: "flex", flexDirection: "column",
-                        boxShadow: "0 1px 4px rgba(0,0,0,0.06)",
-                        }}
-                    >
-                    <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", marginBottom: "0.75rem" }}>
-                        <span style={{ fontWeight: 700, fontSize: 18, color: "#111827" }}>Sierra Madre</span>
-                        <span style={{ fontSize: 13, color: "#9ca3af", fontWeight: 500 }}>ICSJ-3040</span>
-                    </div>
-
-                    <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: "0.75rem", color: "#6b7280" }}>
-                        <Users size={16} />
-                        <span style={{ fontSize: 14, fontWeight: 500 }}>16</span>
-                    </div>
-
-                    <div style={{
-                        borderRadius: 10, overflow: "hidden",
-                        width: "100%", height: 160, marginBottom: "1.25rem",
-                    }}>
-                        <div style={{
-                            width: "100%", height: "100%",
-                            background: "linear-gradient(135deg, #cbd5e1 0%, #94a3b8 100%)",
-                            display: "flex", alignItems: "center", justifyContent: "center",
-                            color: "#64748b", fontSize: 13,
-                        }}>
+                    <div className="bg-white rounded-lg border border-gray-200 p-6 w-72 shrink-0 flex flex-col shadow-sm">
+                        <div className="flex items-baseline justify-between mb-3">
+                            <span className="font-bold text-lg text-gray-900">Sierra Madre</span>
+                            <span className="text-xs text-gray-400 font-medium">ICSJ-3040</span>
+                        </div>
+                        <div className="flex items-center gap-1.5 mb-3 text-gray-500">
+                            <Users size={16} />
+                            <span className="text-sm font-medium">16</span>
+                        </div>
+                        <div className="rounded-xl overflow-hidden w-full h-40 mb-5 bg-gradient-to-br from-slate-300 to-slate-400 flex items-center justify-center text-slate-500 text-sm">
                             No me jalo la imagen
                         </div>
-                    </div>
-
-                    <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-                        <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
-                            <div style={{
-                                display: "grid", gridTemplateColumns: "1fr 1fr 1fr",
-                                gap: 6, padding: "0 8px", marginBottom: 4
-                            }}>
-                                <div style={{ display: "flex", justifyContent: "center" }}>
-                                    <Calendar size={15} color="#9ca3af" />
+                        <div className="flex flex-col gap-5">
+                            <div className="grid grid-cols-3 gap-1.5 px-2 mb-1">
+                                <div className="flex justify-center">
+                                    <Calendar size={15} className="text-gray-400" />
                                 </div>
-                                <div style={{ display: "flex", justifyContent: "center" }}>
-                                    <Clock size={15} color="#9ca3af" />
+                                <div className="flex justify-center">
+                                    <Clock size={15} className="text-gray-400" />
                                 </div>
-                                <div style={{ display: "flex", justifyContent: "center" }}>
-                                    <LogOut size={15} color="#9ca3af" />
+                                <div className="flex justify-center">
+                                    <LogOut size={15} className="text-gray-400" />
                                 </div>
                             </div>
+
                             {SESIONES.map((s, i) => (
-                                <div key={i} style={{
-                                    display: "grid", gridTemplateColumns: "1fr 1fr 1fr",
-                                    gap: 6, background: "#f9fafb", borderRadius: 10,
-                                    padding: "10px 8px", border: "1px solid #f3f4f6",
-                                }}>
-                                    <span style={{ fontSize: 12, fontWeight: 600, color: "#374151", textAlign: "center" }}>{s.fecha}</span>
-                                    <span style={{ fontSize: 12, fontWeight: 600, color: "#374151", textAlign: "center" }}>{s.inicio}</span>
-                                    <span style={{ fontSize: 12, fontWeight: 600, color: "#374151", textAlign: "center" }}>{s.fin}</span>
-                                </div>
+                            <div
+                                key={i}
+                                className="grid grid-cols-3 gap-1.5 bg-gray-50 rounded-xl px-2 py-2.5 border border-gray-100"
+                            >
+                                <span className="text-xs font-semibold text-gray-700 text-center">{s.fecha}</span>
+                                <span className="text-xs font-semibold text-gray-700 text-center">{s.inicio}</span>
+                                <span className="text-xs font-semibold text-gray-700 text-center">{s.fin}</span>
+                            </div>
                             ))}
                         </div>
                     </div>
-                </div>
-
-                <div className="flex flex-col flex-1 gap-4 min-h-0">
-                    <div
-                        ref={searchRef}
-                        style={{
-                            background: "white", borderRadius: 16,
-                            border: "1px solid #e5e7eb", padding: "1.25rem 1.5rem",
-                            boxShadow: "0 1px 4px rgba(0,0,0,0.06)",
-                            flexShrink: 0, position: "relative",
-                        }}
-                    >
-                        <div style={{ position: "relative" }}>
-                            <span style={{
-                                position: "absolute", left: 14, top: "50%",
-                                transform: "translateY(-50%)", color: "#9ca3af",
-                                display: "flex", pointerEvents: "none",
-                            }}>
-                                <Search size={17} />
-                            </span>
-                <input
-                    type="text"
-                    value={busqueda}
-                    onChange={(e) => setBusqueda(e.target.value)}
-                    onFocus={() => setDropdownAbierto(true)}
-                    placeholder="Buscar un correo, nombre o equipo para invitar"
-                    style={{
-                        width: "100%", padding: "12px 14px 12px 42px",
-                        border: "1px solid #e5e7eb",
-                        borderRadius: dropdownAbierto ? "10px 10px 0 0" : 10,
-                        fontSize: 14, color: "#374151", outline: "none",
-                        background: "white", boxSizing: "border-box",
-                        fontFamily: "inherit",
-                    }}
-                    onFocus={(e) => {
-                        setDropdownAbierto(true);
-                        e.target.style.borderColor = "#a78bfa";
-                    }}
-                    onBlur={(e) => {
-                        e.target.style.borderColor = "#e5e7eb";
-                    }}
-                />
-
-                {dropdownAbierto && (
-                    <div style={{
-                        position: "absolute", top: "100%", left: 0, right: 0,
-                        background: "white",
-                        border: "1px solid #a78bfa", borderTop: "none",
-                        borderRadius: "0 0 10px 10px",
-                        boxShadow: "0 8px 24px rgba(0,0,0,0.10)",
-                        zIndex: 50,
-                    }}>
-                        <div style={{ padding: "10px 16px 4px" }}>
-                            <span style={{ fontSize: 11, fontWeight: 700, color: "#9ca3af", letterSpacing: "0.06em", textTransform: "uppercase" }}>
-                                Recientes
-                            </span>
-                        </div>
-                        {personasFiltradas.map((p) => (
-                            <button
-                                key={p.id}
-                                onClick={() => agregarPersona(p)}
-                                style={{
-                                    display: "flex", alignItems: "center", gap: 12,
-                                    width: "100%", padding: "9px 16px",
-                                    background: "none", border: "none", cursor: "pointer",
-                                    textAlign: "left", fontFamily: "inherit",
-                                }}
-                                onMouseEnter={(e) => (e.currentTarget.style.background = "#f9fafb")}
-                                onMouseLeave={(e) => (e.currentTarget.style.background = "none")}
-                            >
-                                <Avatar nombre={p.nombre} bg="#ede9fe" color="#6d28d9" size={36} />
-                                <div>
-                                    <div style={{ fontSize: 14, fontWeight: 600, color: "#111827" }}>{p.nombre}</div>
-                                    <div style={{ fontSize: 12, color: "#9ca3af" }}>{p.email}</div>
-                                </div>
-                            </button>
-                        ))}
-
-                        <div style={{ padding: "10px 16px 4px", borderTop: "1px solid #f3f4f6", marginTop: 4 }}>
-                            <span style={{ fontSize: 11, fontWeight: 700, color: "#9ca3af", letterSpacing: "0.06em", textTransform: "uppercase" }}>
-                                Equipos
-                            </span>
-                        </div>
-                        <div style={{ display: "flex", flexWrap: "wrap", gap: 8, padding: "8px 16px 14px" }}>
-                            {equiposFiltrados.map((eq) => (
-                                <button
-                                    key={eq.id}
-                                    onClick={() => agregarEquipo(eq)}
-                                    style={{
-                                        display: "flex", alignItems: "center", gap: 6,
-                                        background: eq.color, border: "none", borderRadius: 20,
-                                        padding: "7px 14px", cursor: "pointer",
-                                        fontSize: 13, fontWeight: 600, color: "#374151",
-                                        fontFamily: "inherit", transition: "opacity 0.15s",
-                                    }}
-                                    onMouseEnter={(e) => (e.currentTarget.style.opacity = "0.75")}
-                                    onMouseLeave={(e) => (e.currentTarget.style.opacity = "1")}
-                                >
-                                    <Users size={13} />
-                                        {eq.nombre}
-                                    <span style={{ fontSize: 11, color: "#6b7280" }}>({eq.miembros})</span>
-                                </button>
-                             ))}
-                        </div>
-                    </div>
-                )}
-            </div>
-        </div>
-
-        <div style={{
-            background: "white", borderRadius: 16,
-            border: "1px solid #e5e7eb",
-            boxShadow: "0 1px 4px rgba(0,0,0,0.06)",
-            flex: 1, minHeight: 0,
-            display: "flex", flexDirection: "column",
-        }}>
-            <div style={{
-                flex: 1, overflowY: "auto",
-                padding: "1.25rem 1.5rem 0.75rem",
-                display: "flex", flexDirection: "column", gap: 10,
-            }}>
-                {invitados.map((inv) => (
-                    <div key={inv.id} style={{
-                        display: "flex", alignItems: "center", gap: 14,
-                        background: "#f9fafb", borderRadius: 12,
-                        padding: "12px 14px", border: "1px solid #f3f4f6",
-                        flexShrink: 0, overflow: "auto",
-                    }}>
-                        <Avatar
-                            nombre={inv.nombre}
-                            bg={inv.tipo === "colaborador" ? "#ede9fe" : "#e0f2fe"}
-                            color={inv.tipo === "colaborador" ? "#6d28d9" : "#0369a1"}
-                        />
-                        <div style={{ flex: 1, minWidth: 0 }}>
-                            <div style={{ fontWeight: 600, fontSize: 15, color: "#111827", marginBottom: 2 }}>
-                                {inv.nombre}
-                            </div>
-                            <div style={{ fontSize: 13, color: "#6b7280", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-                                {inv.email}
-                            </div>
-                        </div>
-                        {inv.tipo === "invitado" && (
-                            <span style={{
-                                fontSize: 11, fontWeight: 600, color: "#0369a1",
-                                background: "#e0f2fe", borderRadius: 6, padding: "2px 8px", flexShrink: 0,
-                            }}>
-                                Invitado
-                            </span>
-                        )}
-                        <button
-                            onClick={() => eliminarInvitado(inv.id)}
-                            style={{
-                                background: "none", border: "none", cursor: "pointer",
-                                color: "#9ca3af", display: "flex", alignItems: "center",
-                                padding: 4, borderRadius: 6, flexShrink: 0, transition: "color 0.15s",
-                            }}
-                            onMouseEnter={(e) => (e.currentTarget.style.color = "#374151")}
-                            onMouseLeave={(e) => (e.currentTarget.style.color = "#9ca3af")}
-                            aria-label="Eliminar invitado"
+                    <div className="flex flex-col flex-1 gap-4 min-h-0">
+                        <div
+                            ref={searchRef}
+                            className="bg-white rounded-2xl border border-gray-200 px-6 py-5 shadow-sm shrink-0 relative"
                         >
-                            <X size={18} />
-                        </button>
+                            <div className="relative">
+                                <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none flex">
+                                    <Search size={17} />
+                                </span>
+                                <input
+                                    type="text"
+                                    value={busqueda}
+                                    onChange={(e) => setBusqueda(e.target.value)}
+                                    onFocus={() => setDropdownAbierto(true)}
+                                    placeholder="Buscar un correo, nombre o equipo para invitar"
+                                    className={`w-full py-3 pl-10 pr-3.5 border border-gray-200 text-sm text-gray-700 outline-none bg-white box-border font-[inherit] transition-colors focus:border-violet-400 ${
+                                        dropdownAbierto ? "rounded-t-xl" : "rounded-xl"
+                                    }`}
+                                />
+                                {dropdownAbierto && (
+                                    <div className="absolute top-full left-0 right-0 bg-white border border-violet-400 border-t-0 rounded-b-xl shadow-xl z-50">
+                                        <div className="px-4 pt-2.5 pb-1">
+                                            <span className="text-[11px] font-bold text-gray-400 tracking-widest uppercase">
+                                                Recientes
+                                        </span>
+                                        </div>
+                                        {personasFiltradas.map((p) => (
+                                            <button
+                                                key={p.id}
+                                                onClick={() => agregarPersona(p)}
+                                                className="flex items-center gap-3 w-full px-4 py-2.5 bg-transparent border-none cursor-pointer text-left font-[inherit] hover:bg-gray-50 transition-colors"
+                                            >
+                                                <Avatar nombre={p.nombre} variant="colaborador" size="sm" />
+                                                <div>
+                                                    <div className="text-sm font-semibold text-gray-900">{p.nombre}</div>
+                                                    <div className="text-xs text-gray-400">{p.email}</div>
+                                                </div>
+                                            </button>
+                                        ))}
+                                        <div className="px-4 pt-2.5 pb-1 border-t border-gray-100 mt-1">
+                                            <span className="text-[11px] font-bold text-gray-400 tracking-widest uppercase">
+                                                Equipos
+                                            </span>
+                                        </div>
+                                        <div className="flex flex-wrap gap-2 px-4 pb-3.5 pt-2">
+                                            {equiposFiltrados.map((eq) => (
+                                                <button
+                                                    key={eq.id}
+                                                    onClick={() => agregarEquipo(eq)}
+                                                    className={`flex items-center gap-1.5 ${eq.color} border-none rounded-full px-3.5 py-1.5 cursor-pointer text-sm font-semibold text-gray-700 font-[inherit] hover:opacity-75 transition-opacity`}
+                                                >
+                                                    <Users size={13} />
+                                                    {eq.nombre}
+                                                    <span className="text-[11px] text-gray-500">({eq.miembros})</span>
+                                                </button>
+                                            ))}
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                        <div className="bg-white rounded-2xl border border-gray-200 shadow-sm flex-1 min-h-0 flex flex-col">
+                            <div className="flex-1 overflow-y-auto px-6 pt-5 pb-3 flex flex-col gap-2.5">
+                                {invitados.map((inv) => (
+                                    <div
+                                        key={inv.id}
+                                        className="flex items-center gap-3.5 bg-gray-50 rounded-xl px-3.5 py-3 border border-gray-100 shrink-0 overflow-auto"
+                                    >
+                                        <Avatar nombre={inv.nombre} variant={inv.tipo} />
+                                        <div className="flex-1 min-w-0">
+                                            <div className="font-semibold text-[15px] text-gray-900 mb-0.5">
+                                                {inv.nombre}
+                                            </div>
+                                            <div className="text-sm text-gray-500 overflow-hidden text-ellipsis whitespace-nowrap">
+                                                {inv.email}
+                                            </div>
+                                        </div>
+                                        {inv.tipo === "invitado" && (
+                                            <span className="text-[11px] font-semibold text-sky-700 bg-sky-100 rounded-md px-2 py-0.5 shrink-0">
+                                                Invitado
+                                            </span>
+                                        )}
+                                        <button
+                                            onClick={() => eliminarInvitado(inv.id)}
+                                            className="bg-transparent border-none cursor-pointer text-gray-400 flex items-center p-1 rounded-md shrink-0 hover:text-gray-700 transition-colors"
+                                            aria-label="Eliminar invitado"
+                                        >
+                                            <X size={18} />
+                                        </button>
+                                    </div>
+                                ))}
+                                {invitados.length === 0 && (
+                                    <p className="text-sm text-gray-400 text-center py-8">
+                                        No hay invitados agregados aún.
+                                    </p>
+                                )}
+                            </div>
+
+                            <div className="flex items-center justify-between border-t border-gray-100 px-6 py-4 shrink-0">
+                                <span className="text-sm text-gray-500">
+                                    Crear equipo a partir de la selección
+                                </span>
+                                <button
+                                    onClick={() => setCrearEquipo(!crearEquipo)}
+                                    className={`w-11 h-11 rounded-xl border-none cursor-pointer flex items-center justify-center transition-colors shrink-0 ${
+                                        crearEquipo ? "bg-violet-700" : "bg-gray-200"
+                                    }`}
+                                    aria-label="Toggle crear equipo"
+                                >
+                                    {crearEquipo && <Check size={18} className="text-white" strokeWidth={2.5} />}
+                                </button>
+                            </div>
+                        </div>
                     </div>
-                ))}
-
-                {invitados.length === 0 && (
-                  <p style={{ fontSize: 14, color: "#9ca3af", textAlign: "center", padding: "2rem 0" }}>
-                    No hay invitados agregados aún.
-                  </p>
-                )}
-              </div>
-
-              <div style={{
-                display: "flex", alignItems: "center", justifyContent: "space-between",
-                borderTop: "1px solid #f3f4f6", padding: "1rem 1.5rem", flexShrink: 0,
-              }}>
-                <span style={{ fontSize: 14, color: "#6b7280" }}>
-                  Crear equipo a partir de la selección
-                </span>
+                </div>
                 <button
-                  onClick={() => setCrearEquipo(!crearEquipo)}
-                  style={{
-                    width: 44, height: 44, borderRadius: 12,
-                    background: crearEquipo ? "#7c3aed" : "#e5e7eb",
-                    border: "none", cursor: "pointer",
-                    display: "flex", alignItems: "center", justifyContent: "center",
-                    transition: "background 0.2s", flexShrink: 0,
-                  }}
-                  aria-label="Toggle crear equipo"
+                    onClick={handleFinalizar}
+                    className="shrink-0 mt-3 w-full p-3 bg-violet-700 text-white border-none rounded-lg text-lg font-bold cursor-pointer tracking-wide transition-all hover:bg-violet-800 active:scale-99 font-[inherit]"
                 >
-                  {crearEquipo && <Check size={18} color="white" strokeWidth={2.5} />}
+                    Finalizar
                 </button>
-              </div>
             </div>
-          </div>
-        </div>
-
-        <button
-            onClick={handleFinalizar}
-            className="flex-shrink-0 p-2 mt-3"
-            style={{
-                display: "grid", width: "100%",
-                background: "#7c3aed", color: "white",
-                border: "none", borderRadius: 5,
-                fontSize: 18, fontWeight: 700,
-                cursor: "pointer", letterSpacing: "0.2px",
-                transition: "background 0.2s, transform 0.2s",
-                fontFamily: "inherit",
-            }}
-            onMouseEnter={(e) => (e.currentTarget.style.background = "#6d28d9")}
-            onMouseLeave={(e) => (e.currentTarget.style.background = "#7c3aed")}
-            onMouseDown={(e) => (e.currentTarget.style.transform = "scale(0.99)")}
-            onMouseUp={(e) => (e.currentTarget.style.transform = "scale(1)")}
-        >
-            Finalizar
-        </button>
-      </div>
-    </section>
-  );
+        </section>
+    );
 }
