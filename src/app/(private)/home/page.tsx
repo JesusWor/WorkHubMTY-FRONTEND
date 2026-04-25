@@ -5,14 +5,13 @@ import LeftArrow from "../../../../public/left_arrow.png";
 
 export default function Home() {
   return (
-    <section className="flex h-[100svh] w-full overflow-hidden bg-gray-200">
-      <div className="flex-1 px-[4rem] py-8 pt-25">
+    <section className="flex h-[100svh] w-full bg-background-page overflow-auto">
+      <div className="flex-1 px-[4rem] py-8">
         <h3 className="text-4xl font-semibold leading-tight">
           Bienvenido, Croissant
         </h3>
 
         <div className="flex gap-10 mx-[2svw] my-[3svh] h-[85%]">
-          
           <div className="flex w-[30%] flex-col rounded-[0.5rem] bg-white p-6">
             <div className="flex items-center justify-between mb-6">
               <h3 className="text-xl font-bold">Red personal</h3>
@@ -48,32 +47,32 @@ export default function Home() {
             </div>
           </div>
 
-         
           <div className="flex w-[60%] flex-col gap-6">
-            
-            
             <div className="flex flex-1 flex-col rounded-[0.5rem] bg-white p-6">
               <h3 className="text-xl font-bold mb-4">Agenda rápida</h3>
 
               <div className="relative w-full h-full pl-16 pb-6">
-                
-                
                 <div className="absolute inset-0 grid grid-cols-8 grid-rows-6">
                   {Array.from({ length: 48 }).map((_, i) => (
                     <div key={i} className="border border-gray-200" />
                   ))}
                 </div>
 
-                
                 <div className="absolute left-0 top-0 h-full flex flex-col justify-between pr-2">
-                  {["LUNES", "MARTES", "MIÉRCOLES", "JUEVES", "VIERNES", "SÁBADO"].map((day) => (
+                  {[
+                    "LUNES",
+                    "MARTES",
+                    "MIÉRCOLES",
+                    "JUEVES",
+                    "VIERNES",
+                    "SÁBADO",
+                  ].map((day) => (
                     <span key={day} className="text-xs text-gray-400">
                       {day}
                     </span>
                   ))}
                 </div>
 
-               
                 <div className="absolute inset-0">
                   <div
                     className="absolute bg-purple-600 h-2 rounded-full"
@@ -90,18 +89,24 @@ export default function Home() {
                 </div>
 
                 <div className="absolute bottom-0 left-16 right-0 flex justify-between text-xs text-gray-400">
-                  {["6:00","8:00","10:00","12:00","14:00","16:00","18:00"].map(h => (
+                  {[
+                    "6:00",
+                    "8:00",
+                    "10:00",
+                    "12:00",
+                    "14:00",
+                    "16:00",
+                    "18:00",
+                  ].map((h) => (
                     <span key={h}>{h}</span>
                   ))}
                 </div>
-
               </div>
             </div>
 
             <div className="flex flex-col rounded-[0.5rem] bg-white p-6 cursor-pointer hover:shadow-md transition">
               <h3 className="text-xl font-bold mb-4">Juntas y Eventos</h3>
               <div className="flex justify-end gap-4 mt-auto">
-                
                 <Image
                   src={LeftArrow}
                   alt="Left Arrow"
@@ -115,11 +120,8 @@ export default function Home() {
                   className="w-6 select-none cursor-pointer"
                   priority
                 />
-
               </div>
-
             </div>
-
           </div>
         </div>
       </div>

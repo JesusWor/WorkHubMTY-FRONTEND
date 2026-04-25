@@ -1,5 +1,5 @@
 import "../globals.css";
-import Navbar from "../components/Navbar";
+import Navbar from "../components/Navbar/Navbar";
 
 export default function PrivateLayout({
   children,
@@ -8,7 +8,7 @@ export default function PrivateLayout({
 }>) {
   return (
     <div
-      className="flex flex-col min-h-screen  w-screen"
+      className="flex flex-col min-h-screen  w-screen overflow-hidden"
       style={{ fontFamily: "var(--font-manrope)" }}
     >
       <Navbar />

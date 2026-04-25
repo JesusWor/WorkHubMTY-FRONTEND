@@ -7,6 +7,7 @@
 
 @theme {
   --color-primary-1: #a100ff;
+  --color-on-primary-1: #ffffff;
 
   --color-background: #ededed;
   --color-background-page: #e3e3e3;
@@ -16,7 +17,7 @@
 
   --color-surface-lowest: #000000;
   --color-neutral-1: #f0f0f0;
-  --color-on-surface-container: #ffffff;
+  --color-container: #ffffff;
 }
 /* 
 @media (prefers-color-scheme: dark) {
