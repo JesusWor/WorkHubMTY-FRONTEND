@@ -18,6 +18,10 @@
   --color-surface-lowest: #000000;
   --color-neutral-1: #f0f0f0;
   --color-container: #ffffff;
+
+  --color-grid-lines: #e7e7e7;
+
+  --color-container-on-container: #f9f9f9;
 }
 /* 
 @media (prefers-color-scheme: dark) {
