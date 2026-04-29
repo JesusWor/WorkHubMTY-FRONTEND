@@ -16,8 +16,6 @@ import { ProposedSchedulesCard } from "@/app/features/reservaciones/components/P
 import { ReservationFooter } from "@/app/features/reservaciones/components/ReservationFooter";
 import { ReservationTimelineCard } from "@/app/features/reservaciones/components/ReservationTimelineCard";
 
-import { initialBlocks } from "@/app/features/reservaciones/constants/reservaciones";
-
 import {
   apiGetExternalEventsInInterval,
   apiGetSpaceReservationsByDay,
@@ -73,25 +71,7 @@ export default function ReservationSchedulerPage() {
     defaultDateIds[0] ?? getFirstAvailableDateId(calendarCells),
   );
 
-  const [dayBlocks, setDayBlocks] = useState<Record<string, TimeBlock[]>>({
-    [defaultDateIds[0] ?? getFirstAvailableDateId(calendarCells)]:
-      initialBlocks,
-    [defaultDateIds[1] ?? getFirstAvailableDateId(calendarCells)]: [
-      {
-        id: "b1",
-        label: "Bloque 1",
-        start: "09:00 AM",
-        end: "10:30 AM",
-        conflict: true,
-      },
-      {
-        id: "b2",
-        label: "Bloque 2",
-        start: "03:00 PM",
-        end: "04:00 PM",
-      },
-    ],
-  });
+  const [dayBlocks, setDayBlocks] = useState<Record<string, TimeBlock[]>>({});
 
   const [pendingBlocks, setPendingBlocks] = useState<TimeBlock[]>([]);
   const [showAllEvents, setShowAllEvents] = useState(false);
@@ -574,7 +554,7 @@ export default function ReservationSchedulerPage() {
           <Card className="p-5">
             <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
               <div className="flex flex-wrap gap-3">
-                {navigationDateIds.slice(0, 5).map((dateId) => (
+                {navigationDateIds.map((dateId) => (
                   <button
                     key={dateId}
                     type="button"
