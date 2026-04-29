@@ -18,34 +18,66 @@ export default function Navbar() {
   useEffect(() => {
     console.log(pathname);
   }, [pathname]);
+
   return (
     <header className="w-full sticky top-0 h-16 z-40 bg-background flex flex-row gap-4 px-4">
-      {/* <div className="container mx-auto flex flex-col items-center justify-between"> */}
       <span className="text-2xl self-center font-bold text-on-surface-container pl-2">
-        <Image
-          src={AccentureLogo}
-          alt="accenture logo"
-          width={40}
-          height={40}
-        />
+        <a href="/home">
+          <Image src={AccentureLogo} alt="accenture logo" width={40} height={40} />
+        </a>
       </span>
-      {/* </div> */}
-      <nav className="flex flex-row text-white gap-4 ml-2">
-        {routes.map((route) => (
-          <Link
-            key={route.href}
-            className={`${pathname.startsWith(route.href) ? "tab-active self-end rounded-t-xl" : "self-center rounded-full"} text-on-background px-4 py-2 bg-background-page flex flex-row items-center gap-4 `}
-            href={route.href}
-          >
-            <span className="text-xs font-light select-none">{route.name}</span>
-          </Link>
-        ))}
+
+      <nav className="flex flex-row text-white gap-1 ml-2 items-end h-full">
+        <svg width="0" height="0" className="absolute">
+          <defs>
+            <clipPath id="tab-shape" clipPathUnits="objectBoundingBox">
+              <path d="
+                M0.20,0.08
+                Q0.22,0 0.30,0
+                L0.70,0
+                Q0.78,0 0.80,0.08
+                L1,1
+                L0,1
+                Z
+              " />
+            </clipPath>
+          </defs>
+        </svg>
+
+        {routes.map((route) => {
+          const isActive = pathname.startsWith(route.href);
+          return (
+            <Link
+              key={route.href}
+              className={
+                isActive
+                  ? "bg-background-page text-on-background flex items-center justify-center"
+                  : "bg-background-page text-on-background px-4 py-1.5 rounded-full self-center flex items-center"
+              }
+              style={
+                isActive
+                  ? {
+                      clipPath: "url(#tab-shape)",
+                      height: "44px",
+                      width: "120px",
+                      alignSelf: "flex-end",
+                      paddingTop: "4px",
+                    }
+                  : {}
+              }
+              href={route.href}
+            >
+              <span className="text-xs font-light select-none">{route.name}</span>
+            </Link>
+          );
+        })}
       </nav>
+
       <label className="ml-auto flex gap-2 bg-background-page self-center px-4 py-2 rounded-full text-xs text-on-background-2">
         <span className="material-symbols-outlined">chat_bubble</span>
         <button>Pide al chatbot</button>
       </label>
-      <label className="bg-background-page self-center p-2 select-none rounded-full text-on-background-2 font-semibold material-symbols-outlined ">
+      <label className="bg-background-page self-center p-2 select-none rounded-full text-on-background-2 font-semibold material-symbols-outlined">
         notifications
       </label>
       <label className="bg-background-page self-center p-2 select-none rounded-full text-on-background-2 font-semibold material-symbols-outlined">
