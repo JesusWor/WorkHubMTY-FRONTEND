@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect } from "react";
 import AccentureLogo from "../../../../public/accenture_logo_purple1.png";
 import Image from "next/image";
@@ -15,6 +15,7 @@ const routes = [
 
 export default function Navbar() {
   const pathname = usePathname();
+  const route = useRouter();
   useEffect(() => {
     console.log(pathname);
   }, [pathname]);
@@ -82,9 +83,9 @@ export default function Navbar() {
         })}
       </nav>
 
-      <label className="ml-auto flex gap-2 bg-background-page self-center px-4 py-2 rounded-full text-xs text-on-background-2">
+      <label className="ml-auto flex gap-2 bg-background-page self-center px-4 py-2 rounded-full text-xs text-on-background-2 cursor-pointer">
         <span className="material-symbols-outlined">chat_bubble</span>
-        <button>Pide al chatbot</button>
+        <button onClick={() => route.push("/chatbot")} className="cursor-pointer">Pide al chatbot</button>
       </label>
       <label className="bg-background-page self-center p-2 select-none rounded-full text-on-background-2 font-semibold material-symbols-outlined">
         notifications
@@ -93,7 +94,7 @@ export default function Navbar() {
         href="/perfil"
         className="bg-background-page self-center select-none rounded-full text-on-background-2 font-semibold"
       >
-        <label className="bg-background-page self-center p-2 select-none rounded-full text-on-background-2 font-semibold material-symbols-outlined">
+        <label className="bg-background-page self-center p-2 select-none rounded-full text-on-background-2 font-semibold material-symbols-outlined cursor-pointer">
           person
         </label>
       </Link>

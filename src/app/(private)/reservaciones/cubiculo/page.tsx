@@ -2,8 +2,8 @@
 
 import { useState, useRef, useEffect } from "react";
 import { Search, Calendar, Clock, Users, LogOut, X, Check } from "lucide-react";
-import ListaInvitados from "@/app/components/ScrollInivitados/ListaInvitados.tsx";
-import PageTransition from "@/app/components/PageTransition/PageTransition.tsx";
+import ListaInvitados from "@/app/components/ScrollInivitados/ListaInvitados";
+import PageTransition from "@/app/components/PageTransition/PageTransition";
 import { label } from "framer-motion/client";
 
 interface Invitado {
