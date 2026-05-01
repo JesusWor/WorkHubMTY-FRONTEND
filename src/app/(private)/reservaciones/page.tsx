@@ -553,24 +553,7 @@ export default function ReservationSchedulerPage() {
         <div className="space-y-5">
           <Card className="p-5">
             <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
-              <div className="flex flex-wrap gap-3">
-                {navigationDateIds.map((dateId) => (
-                  <button
-                    key={dateId}
-                    type="button"
-                    onClick={() => setActiveDayId(dateId)}
-                    className={cn(
-                      "flex items-center gap-2 rounded-xl border px-4 py-2 text-sm font-semibold transition",
-                      activeDayId === dateId
-                        ? "border-violet-700 bg-violet-700 text-white shadow-sm"
-                        : "border-slate-200 bg-white text-slate-700 hover:bg-slate-50",
-                    )}
-                  >
-                    <CalendarDays className="h-4 w-4" />
-                    {formatShortDateById(dateId)}
-                  </button>
-                ))}
-              </div>
+              <div className="flex flex-wrap gap-3"></div>
 
               <div className="flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-2 py-1">
                 <button
