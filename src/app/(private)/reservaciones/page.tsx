@@ -15,6 +15,7 @@ import { EventsAndConflictsCard } from "@/app/features/reservaciones/components/
 import { ProposedSchedulesCard } from "@/app/features/reservaciones/components/ProposedSchedulesCard";
 import { ReservationFooter } from "@/app/features/reservaciones/components/ReservationFooter";
 import { ReservationTimelineCard } from "@/app/features/reservaciones/components/ReservationTimelineCard";
+import PageTransition from "@/app/components/PageTransition/PageTransition.tsx";
 
 import {
   apiGetExternalEventsInInterval,
@@ -534,6 +535,7 @@ export default function ReservationSchedulerPage() {
     // router.push("/reservations/confirm");
   }
   return (
+    <PageTransition>
     <main className="min-h-screen bg-background-page p-4 text-slate-950 sm:p-6 lg:p-8">
       <header className="mb-5 flex items-center justify-between rounded-2xl px-5">
         <div className="flex items-center gap-4">
@@ -802,5 +804,6 @@ export default function ReservationSchedulerPage() {
         </aside>
       </div>
     </main>
+    </PageTransition>
   );
 }
