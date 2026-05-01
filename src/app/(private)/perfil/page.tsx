@@ -1,3 +1,5 @@
+"use client"
+
 import React from "react";
 import {
   Bell,
@@ -17,135 +19,16 @@ import {
   UsersRound,
 } from "lucide-react";
 
-type FriendStatus = "En línea" | "Ausente" | "Desconectado";
+import { usePerfil } from "@/app/modules/perfil/usePerfil";
+import type {
+  Achievement,
+  AchievementTone,
+  Friend,
+  FriendStatus,
+  UserProfile,
+} from "@/app/modules/perfil/perfil.types";
 
-type Friend = {
-  id: number;
-  name: string;
-  role: string;
-  status: FriendStatus;
-  avatar: string;
-};
-
-type Achievement = {
-  id: number;
-  title: string;
-  description: string;
-  progress: number;
-  total: number;
-  icon: React.ElementType;
-  tone: "purple" | "red" | "blue" | "green" | "yellow";
-};
-
-const friends: Friend[] = [
-  {
-    id: 1,
-    name: "Carlos Méndez",
-    role: "Compañero",
-    status: "En línea",
-    avatar:
-      "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=120&h=120&fit=crop&crop=face",
-  },
-  {
-    id: 2,
-    name: "Valeria Ruiz",
-    role: "Compañera",
-    status: "En línea",
-    avatar:
-      "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=120&h=120&fit=crop&crop=face",
-  },
-  {
-    id: 3,
-    name: "Andrés Gómez",
-    role: "Organizador",
-    status: "Ausente",
-    avatar:
-      "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=120&h=120&fit=crop&crop=face",
-  },
-  {
-    id: 4,
-    name: "Sofía Martínez",
-    role: "Compañera",
-    status: "Desconectado",
-    avatar:
-      "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=120&h=120&fit=crop&crop=face",
-  },
-  {
-    id: 5,
-    name: "Diego Ramírez",
-    role: "Compañero",
-    status: "Desconectado",
-    avatar:
-      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=120&h=120&fit=crop&crop=face",
-  },
-  {
-    id: 6,
-    name: "Ana Torres",
-    role: "Compañera",
-    status: "Desconectado",
-    avatar:
-      "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=120&h=120&fit=crop&crop=face",
-  },
-];
-
-const achievements: Achievement[] = [
-  {
-    id: 1,
-    title: "Primera amistad",
-    description: "Agrega 1 amigo a tu red",
-    progress: 1,
-    total: 1,
-    icon: UsersRound,
-    tone: "purple",
-  },
-  {
-    id: 2,
-    title: "Red activa",
-    description: "Ten 10 amigos en tu red",
-    progress: 7,
-    total: 10,
-    icon: UsersRound,
-    tone: "purple",
-  },
-  {
-    id: 3,
-    title: "Racha de 10 días",
-    description: "Inicia sesión 10 días seguidos",
-    progress: 6,
-    total: 10,
-    icon: Flame,
-    tone: "red",
-  },
-  {
-    id: 4,
-    title: "Creador de salas",
-    description: "Crea 5 salas de reserva",
-    progress: 2,
-    total: 5,
-    icon: CalendarDays,
-    tone: "blue",
-  },
-  {
-    id: 5,
-    title: "Participación semanal",
-    description: "Participa en 10 eventos",
-    progress: 5,
-    total: 10,
-    icon: CalendarDays,
-    tone: "green",
-  },
-  {
-    id: 6,
-    title: "Coleccionista",
-    description: "Completa 20 logros",
-    progress: 5,
-    total: 20,
-    icon: Star,
-    tone: "yellow",
-  },
-];
-
-const toneStyles: Record<Achievement["tone"], string> = {
+const toneStyles: Record<AchievementTone, string> = {
   purple: "bg-purple-100 text-purple-700",
   red: "bg-red-100 text-red-500",
   blue: "bg-blue-100 text-blue-500",
@@ -187,13 +70,19 @@ function StatCard({
   );
 }
 
-function ProfileCard() {
+function ProfileCard({ profile }: { profile: UserProfile }) {
+  const joinedDate = new Date(profile.createdAt).toLocaleDateString("es-MX", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  });
+
   return (
     <section className="rounded-lg bg-container p-7 ring-1 ring-slate-200/80">
       <div className="flex gap-8">
         <div className="relative shrink-0">
           <img
-            src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=220&h=220&fit=crop&crop=face"
+            src={profile.avatar}
             alt="Foto de perfil"
             className="h-36 w-36 rounded-full bg-purple-100 object-cover ring-8 ring-purple-100/70"
           />
@@ -203,10 +92,10 @@ function ProfileCard() {
           <div className="flex items-start justify-between ">
             <div className="flex flex-col gap-2">
               <h2 className="text-xl font-bold tracking-tight text-slate-950">
-                María Fernanda López
+                {profile.name}
               </h2>
               <p className="text-md font-semibold text-purple-700">
-                @mariafernanda
+                @{profile.id}
               </p>
               <p className="max-w-2xl text-sm leading-7 text-slate-600">
                 Estudiante de ingeniería en Sistemas. Me encanta organizar
@@ -214,7 +103,7 @@ function ProfileCard() {
               </p>
               <div className="flex items-center gap-2 text-xs font-medium text-slate-600">
                 <GraduationCap className="h-5 w-5" />
-                Estudiante universitario
+                {profile.role}
               </div>
             </div>
 
@@ -236,7 +125,7 @@ function ProfileCard() {
   );
 }
 
-function FriendsCard() {
+function FriendsCard({ friends }: { friends: Friend[] }) {
   return (
     <section className="rounded-lg bg-container p-6  ring-1 ring-slate-200/80">
       <div className="mb-5 flex items-center justify-between">
@@ -340,7 +229,7 @@ function AchievementRow({ achievement }: { achievement: Achievement }) {
   );
 }
 
-function AchievementsCard() {
+function AchievementsCard({ achievements }: { achievements: Achievement[] }) {
   return (
     <section className="rounded-lg bg-container p-6 ring-1 ring-slate-200/80">
       <div className="mb-5 flex items-center justify-between">
@@ -498,6 +387,24 @@ function FeaturedAchievementsCard() {
 }
 
 export default function UserProfilePage() {
+  const { profile, friends, achievements, isLoading, error } = usePerfil();
+
+  if (isLoading) {
+    return (
+      <div className="mx-auto w-full bg-background-page px-12 py-8">
+        <p className="text-sm text-slate-500">Cargando perfil...</p>
+      </div>
+    );
+  }
+
+  if (error || !profile) {
+    return (
+      <div className="mx-auto w-full bg-background-page px-12 py-8">
+        <p className="text-sm text-red-500">{error ?? "No se pudo cargar el perfil."}</p>
+      </div>
+    );
+  }
+
   return (
     <div className="mx-auto w-full bg-background-page px-12 py-8">
       <div className="flex flex-col gap-2 mb-4">
@@ -511,11 +418,11 @@ export default function UserProfilePage() {
 
       <div className="grid grid-cols-[minmax(0,1fr)_360px] gap-6 ">
         <div className="space-y-6">
-          <ProfileCard />
+          <ProfileCard profile={profile} />
 
           <div className="grid grid-cols-2 gap-6">
-            <FriendsCard />
-            <AchievementsCard />
+            <FriendsCard friends={friends} />
+            <AchievementsCard achievements={achievements} />
           </div>
         </div>
 

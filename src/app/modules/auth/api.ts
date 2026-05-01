@@ -6,6 +6,7 @@ export async function postData<T>(endpoint: string, body: unknown): Promise<T> {
     headers: {
       "Content-Type": "application/json",
     },
+    credentials: "include",
     body: JSON.stringify(body),
   });
   const data = await response.json();
@@ -15,11 +16,9 @@ export async function postData<T>(endpoint: string, body: unknown): Promise<T> {
   return data;
 }
 
-export async function getMe(token: string) {
-  const response = await fetch(`${API_URL}/me`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
+export async function getMe() {
+  const response = await fetch(`${API_URL}/auth/me`, {
+    credentials: "include",
   });
   const data = await response.json();
 
@@ -29,4 +28,11 @@ export async function getMe(token: string) {
   console.log(data);
 
   return data;
+}
+
+export async function postLogout(): Promise<void> {
+  await fetch(`${API_URL}/auth/logout`, {
+    method: "POST",
+    credentials: "include",
+  });
 }

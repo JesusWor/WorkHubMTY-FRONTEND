@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { authService } from "@/app/modules/auth/auth.service";
 import AccentureLogo from "../../../../public/accenture_logo_purple1.png";
 
 interface User {
@@ -28,7 +29,7 @@ export default function Login() {
       return;
     }
     try {
-      // await loginFetch(user);
+      await authService.login(user);
       router.push("/home");
     } catch (err: any) {
       setError(err.message || "Ocurrió un error al iniciar sesión.");
