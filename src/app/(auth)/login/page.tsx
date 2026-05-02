@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { authService } from "@/app/modules/auth/auth.service";
@@ -12,10 +12,20 @@ interface User {
 }
 
 export default function Login() {
-  const [user, setUser]   = useState<User>({ eId: "", password: "" });
+  const [user, setUser] = useState<User>({ eId: "", password: "" });
   const [error, setError] = useState<string>("");
-  const [dark, setDark]   = useState<boolean>(true);
-  const router            = useRouter();
+  const [dark, setDark] = useState<boolean>(true);
+  const router = useRouter();
+
+  const [verifyingSesion, setVerifyingSesion] = useState(true);
+  useEffect(() => {
+    authService.me().then(() => {
+      router.replace("/home");
+    }).catch(() => {
+      setVerifyingSesion(false);
+    });
+  }, []);
+  if (verifyingSesion) return null;
 
   function onChangeUser(e: React.ChangeEvent<HTMLInputElement>) {
     setUser({ ...user, [e.target.name]: e.target.value });
@@ -39,31 +49,31 @@ export default function Login() {
   // ── colour tokens (dark / light) ──────────────────────────────────────
   const t = dark
     ? {
-        bg:         "#0a0a0a",
-        panel:      "#161616",
-        border:     "#2a2a2a",
-        inputBg:    "#222222",
-        text:       "#f0f0f0",
-        textSub:    "#666",
-        textMuted:  "#444",
-        toggleBg:   "#2a2a2a",
-        toggleIcon: "#888",
-        orbOp:      "1",
-        gridAlpha:  "0.06",
-      }
+      bg: "#0a0a0a",
+      panel: "#161616",
+      border: "#2a2a2a",
+      inputBg: "#222222",
+      text: "#f0f0f0",
+      textSub: "#666",
+      textMuted: "#444",
+      toggleBg: "#2a2a2a",
+      toggleIcon: "#888",
+      orbOp: "1",
+      gridAlpha: "0.06",
+    }
     : {
-        bg:         "#f0eff5",
-        panel:      "#ffffff",
-        border:     "#ddd",
-        inputBg:    "#f4f4f4",
-        text:       "#111",
-        textSub:    "#777",
-        textMuted:  "#bbb",
-        toggleBg:   "#e8e4f0",
-        toggleIcon: "#a100ff",
-        orbOp:      "0.45",
-        gridAlpha:  "0.1",
-      };
+      bg: "#f0eff5",
+      panel: "#ffffff",
+      border: "#ddd",
+      inputBg: "#f4f4f4",
+      text: "#111",
+      textSub: "#777",
+      textMuted: "#bbb",
+      toggleBg: "#e8e4f0",
+      toggleIcon: "#a100ff",
+      orbOp: "0.45",
+      gridAlpha: "0.1",
+    };
 
   return (
     <>
@@ -155,9 +165,9 @@ export default function Login() {
       <section
         style={{
           fontFamily: "'DM Sans', sans-serif",
-          background:  t.bg,
-          color:       t.text,
-          transition:  "background .4s, color .4s",
+          background: t.bg,
+          color: t.text,
+          transition: "background .4s, color .4s",
         }}
         className="flex h-[100svh] w-full overflow-hidden"
       >
@@ -196,10 +206,10 @@ export default function Login() {
         <div
           className="acc-panel relative flex flex-col justify-center overflow-hidden px-10 py-12"
           style={{
-            width:      "min(430px, 44%)",
-            background:  t.panel,
+            width: "min(430px, 44%)",
+            background: t.panel,
             borderLeft: `1px solid ${t.border}`,
-            transition:  "background .4s, border-color .4s",
+            transition: "background .4s, border-color .4s",
           }}
         >
           {/* accent bar */}

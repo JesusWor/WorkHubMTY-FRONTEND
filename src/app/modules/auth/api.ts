@@ -25,9 +25,9 @@ export async function getMe() {
   if (!response.ok) {
     throw new Error(data.message || `${response.status} al hacer POST`);
   }
-  console.log(data);
+  const user = data.data;
 
-  return data;
+  return user;
 }
 
 export async function postLogout(): Promise<void> {

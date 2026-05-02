@@ -12,7 +12,7 @@ interface PerfilState {
 }
 
 export function usePerfil(): PerfilState {
-  const { token } = useAuth();
+  const { user } = useAuth();
 
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [friends, setFriends] = useState<Friend[]>([]);
@@ -21,15 +21,15 @@ export function usePerfil(): PerfilState {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!token) return;
+    if (!user) return;
 
     setIsLoading(true);
     setError(null);
 
     Promise.all([
-      perfilApi.getProfile(token),
-      perfilApi.getFriends(token),
-      perfilApi.getAchievements(token),
+      perfilApi.getProfile(),
+      perfilApi.getFriends(),
+      perfilApi.getAchievements(),
     ])
       .then(([p, f, a]) => {
         setProfile(p);
@@ -38,7 +38,7 @@ export function usePerfil(): PerfilState {
       })
       .catch((e: Error) => setError(e.message))
       .finally(() => setIsLoading(false));
-  }, [token]);
+  }, [user]);
 
   return { profile, friends, achievements, isLoading, error };
 }

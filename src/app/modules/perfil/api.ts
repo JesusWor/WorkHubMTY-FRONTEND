@@ -2,9 +2,12 @@ import type { Achievement, Friend, UserProfile } from "./perfil.types";
 
 const API_URL = `${process.env.NEXT_PUBLIC_API_URL}`;
 
-async function authFetch<T>(endpoint: string, token: string): Promise<T> {
+async function authFetch<T>(endpoint: string): Promise<T> {
   const res = await fetch(`${API_URL}${endpoint}`, {
-    headers: { Authorization: `Bearer ${token}` },
+    headers: {
+      "Content-Type": "application/json",
+    },
+    credentials: "include",
   });
   const data = await res.json();
   if (!res.ok) throw new Error(data.message ?? `Error ${res.status}`);
@@ -12,12 +15,12 @@ async function authFetch<T>(endpoint: string, token: string): Promise<T> {
 }
 
 export const perfilApi = {
-  getProfile: (token: string) =>
-    authFetch<UserProfile>("/me", token),
+  getProfile: () =>
+    authFetch<UserProfile>("/me"),
 
-  getFriends: (token: string) =>
-    authFetch<Friend[]>("/me/friends", token),
+  getFriends: () =>
+    authFetch<Friend[]>("/friendships/me"),
 
-  getAchievements: (token: string) =>
-    authFetch<Achievement[]>("/me/achievements", token),
+  getAchievements: () =>
+    authFetch<Achievement[]>("/achievements/me"),
 };
