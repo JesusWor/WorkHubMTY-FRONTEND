@@ -393,32 +393,6 @@ function AchievementsCard() {
   );
 }
 
-// function InfoCard() {
-//   const items = [
-//     { icon: Mail, label: "maria.lopez@correo.com" },
-//     { icon: Phone, label: "+52 55 1234 5678" },
-//     { icon: MapPin, label: "Ciudad de México, México" },
-//     { icon: CalendarDays, label: "Se unió el 15 de feb de 2024" },
-//   ];
-
-//   return (
-//     <section className="rounded-lg bg-container p-6 ring-1 ring-container-border">
-//       <h3 className="text-lg font-bold text-slate-950">Información personal</h3>
-//       <div className="mt-5 space-y-4">
-//         {items.map(({ icon: Icon, label }) => (
-//           <div
-//             key={label}
-//             className="flex items-center gap-4 text-xs text-slate-600"
-//           >
-//             <Icon className="h-5 w-5 text-slate-600" />
-//             <span>{label}</span>
-//           </div>
-//         ))}
-//       </div>
-//     </section>
-//   );
-// }
-
 interface ProgressSummaryCardProps {
   completed: number;
   inProgress: number;
@@ -591,7 +565,7 @@ function TeamsCard() {
   const visibleTeams = teams.slice(0, seeAll ? teams.length : 3);
 
   return (
-    <section className="rounded-md bg-container ring-1 ring-container-border">
+    <section className="h-full rounded-md bg-container ring-1 ring-container-border">
       <div className="p-6">
         <div className="mb-5 flex items-center justify-between">
           <h3 className="text-lg font-bold text-on-container">Equipos</h3>
