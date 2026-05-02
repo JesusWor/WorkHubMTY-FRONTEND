@@ -1,12 +1,13 @@
-"use client"
-
-import React from "react";
+"use client";
+import { useState } from "react";
 import {
   Bell,
   BotMessageSquare,
   CalendarDays,
+  ComputerIcon,
   Flame,
   GraduationCap,
+  List,
   Mail,
   MapPin,
   MessageSquare,
@@ -70,54 +71,58 @@ function StatCard({
   );
 }
 
-function ProfileCard({ profile }: { profile: UserProfile }) {
-  const joinedDate = new Date(profile.createdAt).toLocaleDateString("es-MX", {
-    day: "numeric",
-    month: "short",
-    year: "numeric",
-  });
-
+interface ProfileCardProps {
+  name: string;
+  email: string;
+  role: string;
+  avatar: string;
+  puntos: string;
+  racha: string;
+  amigos: string;
+  logros: string;
+}
+function ProfileCard({
+  name,
+  email,
+  role,
+  avatar,
+  puntos,
+  racha,
+  amigos,
+  logros,
+}: ProfileCardProps) {
   return (
-    <section className="rounded-lg bg-container p-7 ring-1 ring-slate-200/80">
+    <section className="rounded-lg bg-container p-7 ring-1 ring-container-border">
       <div className="flex gap-8">
-        <div className="relative shrink-0">
-          <img
-            src={profile.avatar}
-            alt="Foto de perfil"
-            className="h-36 w-36 rounded-full bg-purple-100 object-cover ring-8 ring-purple-100/70"
-          />
-        </div>
-
-        <div className="min-w-0 flex-1 flex flex-col gap-2">
-          <div className="flex items-start justify-between ">
-            <div className="flex flex-col gap-2">
-              <h2 className="text-xl font-bold tracking-tight text-slate-950">
-                {profile.name}
-              </h2>
-              <p className="text-md font-semibold text-purple-700">
-                @{profile.id}
-              </p>
-              <p className="max-w-2xl text-sm leading-7 text-slate-600">
-                Estudiante de ingeniería en Sistemas. Me encanta organizar
-                reuniones productivas y conocer gente nueva.
-              </p>
-              <div className="flex items-center gap-2 text-xs font-medium text-slate-600">
-                <GraduationCap className="h-5 w-5" />
-                {profile.role}
-              </div>
+        <div className="flex w-full items-center gap-10 ">
+          <div className="relative shrink-0">
+            <img
+              src={avatar}
+              alt="Foto de perfil"
+              className="h-36 w-36 rounded-full bg-purple-100 object-cover ring-8 ring-purple-100/70"
+            />
+          </div>
+          <div className="flex flex-col gap-4">
+            <h2 className="text-xl font-bold tracking-tight text-slate-950">
+              {name}
+            </h2>
+            <p className="text-md font-semibold text-purple-700">{email}</p>
+            <div className="flex items-center gap-2 text-xs font-medium text-slate-600">
+              <ComputerIcon className="h-5 w-5" />
+              {role}
             </div>
-
-            <button className="flex items-center gap-2 rounded-lg border border-slate-200 bg-container px-5 py-3 text-sm font-semibold text-slate-700 transition hover:border-purple-200 hover:text-purple-700">
-              <Pencil className="h-4 w-4" />
-              Editar perfil
-            </button>
           </div>
 
-          <div className="mt-7 grid grid-cols-4 gap-4">
-            <StatCard icon={Star} value="2,450" label="Puntos" />
-            <StatCard icon={Flame} value="12 días" label="Racha actual" />
-            <StatCard icon={UsersRound} value="48" label="Amigos" />
-            <StatCard icon={Trophy} value="18" label="Logros completados" />
+          {/* <button className="flex items-center gap-2 rounded-lg border border-slate-200 bg-container px-5 py-3 text-sm font-semibold text-slate-700 transition hover:border-purple-200 hover:text-purple-700">
+              <Pencil className="h-4 w-4" />
+              Editar perfil
+            </button> */}
+
+          <div className="ml-auto grid grid-cols-2 grid-rows-2 gap-4">
+            <StatCard icon={Star} value={puntos} label="Puntos" />
+            <StatCard icon={Flame} value={racha} label="Racha actual" />
+            <StatCard icon={UsersRound} value={amigos} label="Amigos" />
+            <StatCard icon={Trophy} value={logros} label="Logros completados" />
           </div>
         </div>
       </div>
@@ -125,18 +130,25 @@ function ProfileCard({ profile }: { profile: UserProfile }) {
   );
 }
 
-function FriendsCard({ friends }: { friends: Friend[] }) {
+function FriendsCard({ friends } : { friends: Friend[]}) {
+  const [seeAll, setSeeAll] = useState(false);
+  function handleSeeAll() {
+    setSeeAll((prev) => !prev);
+  }
   return (
-    <section className="rounded-lg bg-container p-6  ring-1 ring-slate-200/80">
+    <section className="rounded-lg bg-container p-6 ring-1 ring-container-border">
       <div className="mb-5 flex items-center justify-between">
-        <h3 className="text-lg font-bold text-slate-950">Amistades</h3>
-        <button className="text-sm font-semibold text-purple-700 hover:text-purple-800">
-          Ver todos
+        <h3 className="text-lg font-bold text-on-container">Amistades</h3>
+        <button
+          className="text-sm font-semibold text-primary-1 hover:text-purple-800"
+          onClick={handleSeeAll}
+        >
+          {seeAll ? "Ver menos" : "Ver todos"}
         </button>
       </div>
 
       <div className="divide-y divide-slate-100">
-        {friends.map((friend) => (
+        {friends.slice(0, seeAll ? friends.length : 3).map((friend) => (
           <div
             key={friend.id}
             className="grid grid-cols-[1fr_auto_auto] items-center gap-4 py-3.5 first:pt-0 last:pb-0"
@@ -157,7 +169,7 @@ function FriendsCard({ friends }: { friends: Friend[] }) {
               </div>
             </div>
 
-            <div className="hidden items-center gap-2 text-xs text-slate-500 sm:flex">
+            {/* <div className="hidden items-center gap-2 text-xs text-slate-500 sm:flex">
               <span
                 className={cn(
                   "h-2.5 w-2.5 rounded-full",
@@ -165,10 +177,14 @@ function FriendsCard({ friends }: { friends: Friend[] }) {
                 )}
               />
               {friend.status}
-            </div>
+            </div> */}
 
-            <button className="flex min-w-28 items-center justify-center gap-2 rounded-lg border border-slate-200 bg-container px-4 py-2 text-sm font-semibold text-purple-700 transition hover:border-purple-200 hover:bg-purple-50">
-              <User className="h-4 w-4" /> Ir a perfil
+            <button className="flex min-w-28 items-center justify-center gap-2 rounded-lg border border-container-border bg-container px-4 py-2 text-sm font-semibold text-purple-700 transition hover:border-purple-200 hover:bg-purple-50">
+              <Trophy className="h-4 w-4" />
+              Comparar
+            </button>
+            <button className="flex items-center gap-2 text-sm font-bold text-primary-1 rounded-lg border border-container-border px-4 py-2 hover:bg-primary-1/10 transition">
+              <List className="h-5 w-5 text-primary-1" /> Invitar
             </button>
           </div>
         ))}
@@ -229,55 +245,76 @@ function AchievementRow({ achievement }: { achievement: Achievement }) {
   );
 }
 
-function AchievementsCard({ achievements }: { achievements: Achievement[] }) {
+function AchievementsCard({achievements} : {achievements: Achievement[]}) {
+  const [seeAll, setSeeAll] = useState(false);
+  function handleSeeAll() {
+    // Aquí podrías navegar a una página de logros o mostrar un modal con más detalles
+    setSeeAll((prev) => !prev);
+  }
   return (
-    <section className="rounded-lg bg-container p-6 ring-1 ring-slate-200/80">
+    <section className="rounded-lg bg-container p-6 ring-1 ring-container-border">
       <div className="mb-5 flex items-center justify-between">
-        <h3 className="text-lg font-bold text-slate-950">Logros</h3>
-        <button className="text-sm font-semibold text-purple-700 hover:text-purple-800">
-          Ver todos
+        <h3 className="text-lg font-bold text-on-container">Logros</h3>
+        <button
+          className="text-sm font-semibold text-primary-1 hover:text-primary-2"
+          onClick={handleSeeAll}
+        >
+          {seeAll ? "Ver menos" : "Ver todos"}
         </button>
       </div>
 
       <div className="divide-y divide-slate-100">
-        {achievements.map((achievement) => (
-          <AchievementRow key={achievement.id} achievement={achievement} />
-        ))}
+        {achievements
+          .slice(0, seeAll ? achievements.length : 3)
+          .map((achievement) => (
+            <AchievementRow key={achievement.id} achievement={achievement} />
+          ))}
       </div>
     </section>
   );
 }
 
-function InfoCard() {
-  const items = [
-    { icon: Mail, label: "maria.lopez@correo.com" },
-    { icon: Phone, label: "+52 55 1234 5678" },
-    { icon: MapPin, label: "Ciudad de México, México" },
-    { icon: CalendarDays, label: "Se unió el 15 de feb de 2024" },
-  ];
+// function InfoCard() {
+//   const items = [
+//     { icon: Mail, label: "maria.lopez@correo.com" },
+//     { icon: Phone, label: "+52 55 1234 5678" },
+//     { icon: MapPin, label: "Ciudad de México, México" },
+//     { icon: CalendarDays, label: "Se unió el 15 de feb de 2024" },
+//   ];
 
-  return (
-    <section className="rounded-lg bg-container p-6 ring-1 ring-slate-200/80">
-      <h3 className="text-lg font-bold text-slate-950">Información personal</h3>
-      <div className="mt-5 space-y-4">
-        {items.map(({ icon: Icon, label }) => (
-          <div
-            key={label}
-            className="flex items-center gap-4 text-xs text-slate-600"
-          >
-            <Icon className="h-5 w-5 text-slate-600" />
-            <span>{label}</span>
-          </div>
-        ))}
-      </div>
-    </section>
-  );
+//   return (
+//     <section className="rounded-lg bg-container p-6 ring-1 ring-container-border">
+//       <h3 className="text-lg font-bold text-slate-950">Información personal</h3>
+//       <div className="mt-5 space-y-4">
+//         {items.map(({ icon: Icon, label }) => (
+//           <div
+//             key={label}
+//             className="flex items-center gap-4 text-xs text-slate-600"
+//           >
+//             <Icon className="h-5 w-5 text-slate-600" />
+//             <span>{label}</span>
+//           </div>
+//         ))}
+//       </div>
+//     </section>
+//   );
+// }
+
+interface ProgressSummaryCardProps {
+  completed: number;
+  inProgress: number;
+  notCompleted: number;
 }
-
-function ProgressSummaryCard() {
+function ProgressSummaryCard({
+  completed,
+  inProgress,
+  notCompleted,
+}: ProgressSummaryCardProps) {
   return (
-    <section className="rounded-lg bg-container p-6 ring-1 ring-slate-200/80">
-      <h3 className="text-lg font-bold text-slate-950">Resumen de progreso</h3>
+    <section className="rounded-lg bg-container p-6 ring-1 ring-container-border">
+      <h3 className="text-lg font-bold text-on-container">
+        Resumen de progreso
+      </h3>
 
       <div className="mt-6 flex items-center gap-8">
         <div className="relative h-36 w-36 shrink-0">
@@ -299,12 +336,17 @@ function ProgressSummaryCard() {
               strokeLinecap="round"
               strokeWidth="10"
               strokeDasharray={`${2 * Math.PI * 48}`}
-              strokeDashoffset={`${2 * Math.PI * 48 * (1 - 0.72)}`}
+              strokeDashoffset={`${2 * Math.PI * 48 * (1 - Math.round((completed / (completed + inProgress + notCompleted)) * 100) / 100)}`}
             />
           </svg>
           <div className="absolute inset-0 grid place-items-center text-center">
             <div>
-              <p className="text-xl font-bold text-slate-950">72%</p>
+              <p className="text-xl font-bold text-slate-950">
+                {Math.round(
+                  (completed / (completed + inProgress + notCompleted)) * 100,
+                )}
+                %
+              </p>
               <p className="text-xs text-slate-500">Completado</p>
             </div>
           </div>
@@ -316,21 +358,21 @@ function ProgressSummaryCard() {
               <span className="h-3 w-3 rounded-full bg-purple-700" />
               Logros completados
             </span>
-            <strong className="text-slate-950">18</strong>
+            <strong className="text-slate-950">{completed}</strong>
           </div>
           <div className="flex items-center justify-between gap-4">
             <span className="flex items-center gap-3 text-slate-600">
               <span className="h-3 w-3 rounded-full bg-purple-400" />
               En progreso
             </span>
-            <strong className="text-slate-950">9</strong>
+            <strong className="text-slate-950">{inProgress}</strong>
           </div>
           <div className="flex items-center justify-between gap-4">
             <span className="flex items-center gap-3 text-slate-600">
               <span className="h-3 w-3 rounded-full bg-slate-300" />
               Por completar
             </span>
-            <strong className="text-slate-950">7</strong>
+            <strong className="text-slate-950">{notCompleted}</strong>
           </div>
         </div>
       </div>
@@ -338,72 +380,241 @@ function ProgressSummaryCard() {
   );
 }
 
-function FeaturedAchievementsCard() {
-  const featured = [
+function getInitials({ name }: { name: string }) {
+  const initials = name
+    .split(" ")
+    .map((n) => n[0])
+    .join("")
+    .slice(0, 2)
+    .toUpperCase();
+
+  return initials;
+}
+
+function TeamsCard() {
+  const [seeAll, setSeeAll] = useState(false);
+  const [selectedTeam, setSelectedTeam] = useState<number | null>(null);
+
+  function handleSeeAll() {
+    setSeeAll((prev) => !prev);
+  }
+
+  function handleTeamClick(index: number) {
+    setSelectedTeam((prev) => (prev === index ? null : index));
+  }
+
+  const teams = [
     {
-      title: "Primera amistad",
-      subtitle: "Completado",
-      icon: UsersRound,
-      className: "bg-purple-100 text-purple-700 ring-purple-200",
+      id: 1,
+      name: "Equipo Alpha",
+      role: "Miembro",
+      members: [
+        {
+          profilePicture:
+            "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=120&h=120&fit=crop&crop=face",
+          name: "Carlos Méndez",
+          role: "Product Owner",
+        },
+        {
+          profilePicture:
+            "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=120&h=120&fit=crop&crop=face",
+          name: "Valeria Ruiz",
+          role: "Scrum master",
+        },
+        {
+          profilePicture:
+            "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=120&h=120&fit=crop&crop=face",
+          name: "Andrés Gómez",
+          role: "QA Lead",
+        },
+        {
+          profilePicture:
+            "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=120&h=120&fit=crop&crop=face",
+          name: "Sofía Martínez",
+          role: "Developer",
+        },
+      ],
     },
     {
-      title: "Racha de 10 días",
-      subtitle: "Nivel 2",
-      icon: Flame,
-      className: "bg-red-100 text-red-500 ring-red-200",
+      id: 2,
+      name: "Equipo Beta",
+      role: "Líder",
+      members: [
+        {
+          profilePicture:
+            "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=120&h=120&fit=crop&crop=face",
+          name: "Diego Ramírez",
+          role: "Líder de equipo",
+        },
+        {
+          profilePicture:
+            "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=120&h=120&fit=crop&crop=face",
+          name: "Ana Torres",
+          role: "Miembro",
+        },
+      ],
     },
     {
-      title: "Creador de salas",
-      subtitle: "Nivel 1",
-      icon: CalendarDays,
-      className: "bg-blue-100 text-blue-500 ring-blue-200",
+      id: 3,
+      name: "Equipo Gamma",
+      role: "Miembro",
+      members: [
+        {
+          profilePicture:
+            "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=120&h=120&fit=crop&crop=face",
+          name: "Carlos Méndez",
+          role: "Product Owner",
+        },
+      ],
     },
   ];
 
-  return (
-    <section className="rounded-lg bg-container p-6 ring-1 ring-slate-200/80">
-      <h3 className="text-lg font-bold text-slate-950">Logros destacados</h3>
+  const visibleTeams = teams.slice(0, seeAll ? teams.length : 3);
 
-      <div className="mt-7 grid grid-cols-3 gap-4">
-        {featured.map(({ title, subtitle, icon: Icon, className }) => (
-          <div key={title} className="text-center">
-            <div
-              className={cn(
-                "mx-auto grid h-20 w-20 place-items-center rounded-[1.7rem] ring-4",
-                className,
-              )}
-            >
-              <Icon className="h-9 w-9" />
-            </div>
-            <p className="mt-3 text-sm font-semibold leading-tight text-slate-950">
-              {title}
-            </p>
-            <p className="mt-1 text-xs text-slate-500">{subtitle}</p>
-          </div>
-        ))}
+  return (
+    <section className="rounded-md bg-container ring-1 ring-container-border">
+      <div className="p-6">
+        <div className="mb-5 flex items-center justify-between">
+          <h3 className="text-lg font-bold text-on-container">Equipos</h3>
+
+          <button
+            type="button"
+            className="text-sm font-semibold text-primary-1 hover:text-purple-800"
+            onClick={handleSeeAll}
+          >
+            {seeAll ? "Ver menos" : "Ver todos"}
+          </button>
+        </div>
+
+        <div className="divide-y divide-grid-lines">
+          {visibleTeams.map((team, index) => {
+            const isSelected = selectedTeam === index;
+
+            return (
+              <div key={team.id} className="py-4 first:pt-0 last:pb-0">
+                <button
+                  type="button"
+                  onClick={() => handleTeamClick(index)}
+                  className="flex w-full items-center justify-between gap-4 text-left"
+                >
+                  <div className="flex items-center gap-3">
+                    <span className="grid h-10 w-10 place-items-center rounded-full bg-primary-1/40 text-sm font-bold text-on-primary-1">
+                      {getInitials({ name: team.name })}
+                    </span>
+
+                    <div className="min-w-0">
+                      <p className="truncate text-sm font-semibold text-on-container">
+                        {team.name}
+                      </p>
+                      <p className="text-xs text-on-container/60">
+                        {team.members.length}{" "}
+                        {team.members.length === 1 ? "miembro" : "miembros"} ·{" "}
+                        {team.role}
+                      </p>
+                    </div>
+                  </div>
+
+                  <span className="text-xs font-medium text-on-container/50">
+                    {isSelected ? "Ocultar" : "Ver miembros"}
+                  </span>
+                </button>
+
+                {isSelected && team.members.length > 0 && (
+                  <div className="mt-4 grid gap-2">
+                    {team.members.map((member, memberIndex) => (
+                      <div
+                        key={memberIndex}
+                        className="flex items-center gap-3 rounded-lg bg-white/60 px-3 py-2"
+                      >
+                        <img
+                          src={member.profilePicture}
+                          alt={member.name}
+                          className="h-8 w-8 rounded-full object-cover"
+                        />
+
+                        <div className="min-w-0">
+                          <p className="truncate text-sm font-medium text-on-container">
+                            {member.name}
+                          </p>
+                          <p className="truncate text-xs text-on-container/60">
+                            {member.role}
+                          </p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
       </div>
     </section>
   );
 }
+// function FeaturedAchievementsCard() {
+//   const featured = [
+//     {
+//       title: "Primera amistad",
+//       subtitle: "Completado",
+//       icon: UsersRound,
+//       className: "bg-purple-100 text-purple-700 ring-purple-200",
+//     },
+//     {
+//       title: "Racha de 10 días",
+//       subtitle: "Nivel 2",
+//       icon: Flame,
+//       className: "bg-red-100 text-red-500 ring-red-200",
+//     },
+//     {
+//       title: "Creador de salas",
+//       subtitle: "Nivel 1",
+//       icon: CalendarDays,
+//       className: "bg-blue-100 text-blue-500 ring-blue-200",
+//     },
+//   ];
+
+//   return (
+//     <section className="rounded-lg bg-container p-6 ring-1 ring-container-border">
+//       <h3 className="text-lg font-bold text-slate-950">Logros destacados</h3>
+
+//       <div className="mt-7 grid grid-cols-3 gap-4">
+//         {featured.map(({ title, subtitle, icon: Icon, className }) => (
+//           <div key={title} className="text-center">
+//             <div
+//               className={cn(
+//                 "mx-auto grid h-20 w-20 place-items-center rounded-[1.7rem] ring-4",
+//                 className,
+//               )}
+//             >
+//               <Icon className="h-9 w-9" />
+//             </div>
+//             <p className="mt-3 text-sm font-semibold leading-tight text-slate-950">
+//               {title}
+//             </p>
+//             <p className="mt-1 text-xs text-slate-500">{subtitle}</p>
+//           </div>
+//         ))}
+//       </div>
+//     </section>
+//   );
+// }
 
 export default function UserProfilePage() {
+  const user = {
+    name: "María Fernanda López",
+    email: "maria@accenture.com",
+    role: "Desarrollador fullstack",
+    avatar:
+      "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=220&h=220&fit=crop&crop=face",
+  };
+  const achievementsProgress = {
+    completed: 18,
+    inProgress: 5,
+    notCompleted: 12,
+  };
+
   const { profile, friends, achievements, isLoading, error } = usePerfil();
-
-  if (isLoading) {
-    return (
-      <div className="mx-auto w-full bg-background-page px-12 py-8">
-        <p className="text-sm text-slate-500">Cargando perfil...</p>
-      </div>
-    );
-  }
-
-  if (error || !profile) {
-    return (
-      <div className="mx-auto w-full bg-background-page px-12 py-8">
-        <p className="text-sm text-red-500">{error ?? "No se pudo cargar el perfil."}</p>
-      </div>
-    );
-  }
 
   return (
     <div className="mx-auto w-full bg-background-page px-12 py-8">
@@ -418,19 +629,27 @@ export default function UserProfilePage() {
 
       <div className="grid grid-cols-[minmax(0,1fr)_360px] gap-6 ">
         <div className="space-y-6">
-          <ProfileCard profile={profile} />
+          <ProfileCard
+            {...user}
+            puntos="2,450"
+            racha="12 días"
+            amigos="48"
+            logros="18"
+          />
 
           <div className="grid grid-cols-2 gap-6">
-            <FriendsCard friends={friends} />
-            <AchievementsCard achievements={achievements} />
+            <FriendsCard friends={friends}/>
+            <TeamsCard />
           </div>
         </div>
 
         <aside className="self-stretch">
           <div className="sticky bottom-6 space-y-6">
-            <InfoCard />
-            <ProgressSummaryCard />
-            <FeaturedAchievementsCard />
+            {/* <InfoCard /> */}
+            <ProgressSummaryCard {...achievementsProgress} />
+            <AchievementsCard achievements={achievements}/>
+
+            {/* <FeaturedAchievementsCard /> */}
           </div>
         </aside>
       </div>
