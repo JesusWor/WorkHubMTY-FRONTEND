@@ -1,8 +1,9 @@
 export type FriendStatus = "En línea" | "Ausente" | "Desconectado";
 
 export type Friend = {
-  id: number;
+  id: string;
   name: string;
+  email: string;
   role: string;
   status: FriendStatus;
   avatar: string;

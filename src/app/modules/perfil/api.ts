@@ -9,14 +9,14 @@ async function authFetch<T>(endpoint: string): Promise<T> {
     },
     credentials: "include",
   });
-  const data = await res.json();
-  if (!res.ok) throw new Error(data.message ?? `Error ${res.status}`);
-  return data;
+  const payload = await res.json();
+  if (!res.ok) throw new Error(payload.message ?? `Error ${res.status}`);
+  return payload.data as T;
 }
 
 export const perfilApi = {
   getProfile: () =>
-    authFetch<UserProfile>("/me"),
+    authFetch<UserProfile>("/users/profile"),
 
   getFriends: () =>
     authFetch<Friend[]>("/friendships/me"),

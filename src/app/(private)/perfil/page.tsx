@@ -131,6 +131,7 @@ function ProfileCard({
 }
 
 function FriendsCard({ friends } : { friends: Friend[]}) {
+  console.log(friends);
   const [seeAll, setSeeAll] = useState(false);
   function handleSeeAll() {
     setSeeAll((prev) => !prev);
@@ -601,20 +602,40 @@ function TeamsCard() {
 // }
 
 export default function UserProfilePage() {
-  const user = {
-    name: "María Fernanda López",
-    email: "maria@accenture.com",
-    role: "Desarrollador fullstack",
-    avatar:
-      "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=220&h=220&fit=crop&crop=face",
-  };
-  const achievementsProgress = {
-    completed: 18,
-    inProgress: 5,
-    notCompleted: 12,
-  };
-
   const { profile, friends, achievements, isLoading, error } = usePerfil();
+
+  const user = profile
+    ? {
+        name: profile.name,
+        email: profile.id ? `${profile.name.toLowerCase().replace(/\s+/g, '.')}@workhub.com` : "",
+        role: profile.role,
+        avatar:
+          profile.avatar ||
+          "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=220&h=220&fit=crop&crop=face",
+      }
+    : {
+        name: "María Fernanda López",
+        email: "maria@accenture.com",
+        role: "Desarrollador fullstack",
+        avatar:
+          "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=220&h=220&fit=crop&crop=face",
+      };
+
+  const completedAchievements = achievements.filter(
+    (achievement) => achievement.progress >= achievement.total,
+  ).length;
+  const inProgressAchievements = achievements.filter(
+    (achievement) => achievement.progress > 0 && achievement.progress < achievement.total,
+  ).length;
+  const notCompletedAchievements = achievements.filter(
+    (achievement) => achievement.progress === 0,
+  ).length;
+
+  const achievementsProgress = {
+    completed: completedAchievements,
+    inProgress: inProgressAchievements,
+    notCompleted: notCompletedAchievements,
+  };
 
   return (
     <div className="mx-auto w-full bg-background-page px-12 py-8">
